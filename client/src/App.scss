@@ -1,0 +1,961 @@
+@use 'sass:color';
+@use './styles/tokens' as t;
+
+.app {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px 20px 64px;
+}
+
+// --- Header -------------------------------------------------------------
+.app__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  border-bottom: 2px solid t.$ink;
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  h1 {
+    font-family: t.$font-display;
+    font-weight: 700;
+    font-size: clamp(1.3rem, 2.6vw, 2rem);
+    letter-spacing: 0.04em;
+    margin: 0;
+    color: t.$ink;
+  }
+}
+
+.app__title-ascii {
+  font-family: t.$font-mono;
+  color: t.$verdigris;
+  margin-right: 10px;
+  font-size: 0.85em;
+}
+
+.app__title-sub {
+  font-family: t.$font-body;
+  font-weight: 400;
+  font-size: 0.5em;
+  color: t.$ink-soft;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.app__header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.app__round {
+  font-family: t.$font-mono;
+  font-size: 1rem;
+  background: t.$ink;
+  color: t.$paper;
+  padding: 4px 10px;
+  border-radius: t.$radius;
+}
+
+// --- Tutorial overlay -----------------------------------------------------
+// A no-dependency spotlight: a dim backdrop plus a rectangular cutout (a giant
+// box-shadow around a positioned, pointer-events-free rect) over the current
+// step's target. The callout stays fixed at the bottom of the viewport rather
+// than chasing the target around — robust across the app's 1-4 column responsive
+// layout without per-step positioning logic.
+.tutorial {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  pointer-events: none;
+}
+
+.tutorial__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(t.$ink, 0.45);
+}
+
+.tutorial__spotlight {
+  position: fixed;
+  border-radius: 8px;
+  outline: 2px solid t.$gold;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 9999px rgba(t.$ink, 0.55);
+  transition: top 0.15s ease, left 0.15s ease, width 0.15s ease, height 0.15s ease;
+}
+
+.tutorial__callout {
+  position: fixed;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%);
+  width: min(560px, calc(100vw - 32px));
+  background: t.$paper;
+  border: 1px solid t.$ink;
+  border-radius: t.$radius;
+  box-shadow: 0 4px 24px rgba(t.$ink, 0.35);
+  padding: 16px 18px;
+  pointer-events: auto;
+}
+
+.tutorial__progress {
+  font-family: t.$font-mono;
+  font-size: 0.7rem;
+  color: t.$ink-faint;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 4px;
+}
+
+.tutorial__title {
+  font-family: t.$font-display;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  margin: 0 0 8px;
+  color: t.$verdigris-dark;
+}
+
+.tutorial__body {
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: t.$ink;
+  margin: 0 0 14px;
+}
+
+.tutorial__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+// --- Phase bar ------------------------------------------------------------
+.phase-bar {
+  background: t.$paper;
+  border: 1px solid t.$paper-line;
+  border-radius: t.$radius;
+  box-shadow: t.$shadow-card;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+}
+
+.phase-bar__steps {
+  display: flex;
+  gap: 14px;
+  font-family: t.$font-mono;
+  font-size: 0.78rem;
+  color: t.$ink-faint;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.phase-bar__step.is-active {
+  color: t.$verdigris-dark;
+  font-weight: 700;
+}
+
+.phase-bar__action {
+  display: flex;
+  align-items: center;
+}
+
+.phase-bar__diplomacy {
+  width: 100%;
+}
+
+.phase-bar__row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.hint {
+  font-size: 0.85rem;
+  color: t.$ink-soft;
+  margin: 4px 0 8px;
+}
+
+// --- Buttons ----------------------------------------------------------
+.btn {
+  font-family: t.$font-body;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border: 1px solid t.$ink;
+  background: t.$paper;
+  color: t.$ink;
+  padding: 8px 14px;
+  border-radius: t.$radius;
+  cursor: pointer;
+  transition: transform 0.08s ease, background-color 0.12s ease;
+
+  &:hover:not(:disabled) {
+    background: t.$paper-dark;
+  }
+  &:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+.btn--primary {
+  background: t.$verdigris;
+  border-color: t.$verdigris-dark;
+  color: t.$paper;
+
+  &:hover:not(:disabled) {
+    background: t.$verdigris-dark;
+  }
+}
+
+.btn--small {
+  padding: 5px 10px;
+  font-size: 0.78rem;
+}
+
+.btn--warn {
+  border-color: t.$brick;
+  color: t.$brick;
+}
+
+.btn.is-active {
+  background: t.$gold;
+  color: t.$paper;
+}
+
+// --- Dice ---------------------------------------------------------------
+.app__dice-row {
+  margin-bottom: 18px;
+}
+
+.dice-tray {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  padding: 14px 0;
+  position: relative;
+
+  &::before {
+    content: '≈≈≈ the Mediterranean ≈≈≈';
+    position: absolute;
+    inset: 0 0 auto 0;
+    text-align: center;
+    top: -14px;
+    font-family: t.$font-mono;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    color: t.$ink-faint;
+  }
+}
+
+.die {
+  width: 58px;
+  height: 58px;
+  border: 2px solid t.$ink;
+  border-radius: 8px;
+  background: t.$paper;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-family: t.$font-mono;
+
+  .die__face {
+    font-size: 1.6rem;
+    line-height: 1;
+  }
+  .die__value {
+    font-size: 0.6rem;
+    color: t.$ink-faint;
+  }
+
+  &--white {
+    background: t.$paper;
+  }
+  &--green {
+    background: color.mix(t.$verdigris, t.$paper, 25%);
+  }
+  &--black {
+    background: color.mix(t.$ink, t.$paper, 55%);
+    color: t.$paper;
+    .die__value {
+      color: t.$paper-dark;
+    }
+  }
+  &--locked {
+    opacity: 0.35;
+  }
+  &--used {
+    opacity: 0.3;
+    text-decoration: line-through;
+  }
+  &--selected {
+    outline: 3px solid t.$gold;
+    outline-offset: 2px;
+  }
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+.app__selected-hint {
+  text-align: center;
+  font-size: 0.85rem;
+  color: t.$verdigris-dark;
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+.app__die-modify {
+  display: inline-flex;
+  gap: 6px;
+  margin-left: 10px;
+
+  .btn {
+    padding: 2px 8px;
+    font-size: 0.8rem;
+  }
+}
+
+// --- Grid layout ----------------------------------------------------------
+.app__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.app__col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+@media (max-width: 1100px) {
+  .app__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 640px) {
+  .app__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+// --- Panels -----------------------------------------------------------
+.panel {
+  background: t.$paper;
+  border: 1px solid t.$paper-line;
+  border-radius: t.$radius;
+  box-shadow: t.$shadow-card;
+  padding: 14px 16px;
+}
+
+.panel__title {
+  font-family: t.$font-display;
+  font-size: 0.95rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  margin: 0 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid t.$paper-line;
+  color: t.$ink;
+}
+
+// --- Empire tracks --------------------------------------------------------
+.empire-tracks {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: t.$paper;
+  border: 1px solid t.$paper-line;
+  border-radius: t.$radius;
+  box-shadow: t.$shadow-card;
+  padding: 14px 16px;
+}
+
+.track__title {
+  font-size: 0.75rem;
+  color: t.$ink-soft;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.track__boxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  font-family: t.$font-mono;
+}
+
+.track__box {
+  width: 20px;
+  height: 20px;
+  border: 1px solid t.$ink-faint;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  background: rgba(t.$paper-dark, 0.4);
+  cursor: default; // most tracks; population boxes carry a title tooltip
+}
+
+// Marks the last box of each Great-Person group on the Population track — a
+// visible gap so "fill this many to earn one" reads at a glance.
+.track__box.is-group-end {
+  margin-right: 8px;
+}
+
+.track__hint {
+  font-size: 0.7rem;
+  color: t.$ink-faint;
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+.track__box.is-filled {
+  background: t.$slate;
+  color: t.$paper;
+  border-color: t.$slate;
+}
+.track--gold .track__box.is-filled {
+  background: t.$gold;
+  border-color: t.$gold;
+}
+.track--military .track__box.is-filled {
+  background: t.$brick;
+  border-color: t.$brick;
+}
+.track--science .track__box.is-filled {
+  background: t.$verdigris;
+  border-color: t.$verdigris-dark;
+}
+.track__box.is-highlight:not(.is-filled) {
+  border-color: t.$verdigris;
+  border-width: 2px;
+}
+.track--happy .track__box.is-filled {
+  background: t.$verdigris;
+  border-color: t.$verdigris-dark;
+}
+.track--unhappy .track__box.is-filled {
+  background: t.$brick;
+  border-color: t.$brick;
+}
+
+.track-pair {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+
+  .track {
+    flex: 1;
+    min-width: 160px;
+  }
+}
+
+.track--science-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.track--science-locked .track__title {
+  opacity: 0.55;
+  font-style: italic;
+}
+
+// --- Buildings table --------------------------------------------------
+.buildings__construction {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+  font-size: 0.85rem;
+}
+
+.buildings__table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.buildings__table {
+  width: 100%;
+  min-width: 300px;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+  table-layout: fixed;
+
+  th,
+  td {
+    text-align: left;
+    padding: 5px 4px;
+    border-bottom: 1px solid t.$paper-line;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  th {
+    font-family: t.$font-mono;
+    font-weight: 600;
+    color: t.$ink-soft;
+    text-transform: uppercase;
+    font-size: 0.65rem;
+  }
+  tbody tr.is-placing td {
+    background: color.mix(t.$verdigris, t.$paper, 25%);
+  }
+}
+
+.buildings__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+
+  .btn {
+    width: 100%;
+    padding: 3px 6px;
+  }
+}
+
+.buildings__colony-activate {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+  font-size: 0.85rem;
+}
+
+// --- Map ----------------------------------------------------------------
+.map {
+  margin-bottom: 16px;
+}
+
+.map__cancel {
+  float: right;
+  text-transform: none;
+  letter-spacing: normal;
+  font-family: t.$font-body;
+}
+
+.map__grid-wrap {
+  display: flex;
+  justify-content: center;
+  overflow-x: auto;
+  padding: 4px 0;
+}
+
+.map__grid {
+  display: grid;
+  gap: 2px;
+  font-family: t.$font-mono;
+}
+
+.map__cell {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  border: 1px solid rgba(t.$ink, 0.12);
+  background: color.mix(t.$paper, white, 55%);
+  color: t.$ink-faint;
+  cursor: default;
+}
+
+.map__cell--water {
+  background: color.mix(t.$slate, t.$paper, 60%);
+  color: t.$paper;
+  border-color: color.mix(t.$slate, t.$ink, 70%);
+}
+.map__cell--mountains {
+  background: color.mix(t.$ink-faint, t.$paper, 55%);
+  color: t.$paper;
+}
+.map__cell--borderlands {
+  background: color.mix(t.$brick, t.$paper, 22%);
+}
+.map__cell--ore {
+  background: color.mix(t.$gold, t.$paper, 55%);
+  color: t.$ink;
+  font-weight: 700;
+}
+.map__cell--barbarian {
+  background: t.$brick;
+  color: t.$paper;
+  font-weight: 700;
+}
+.map__cell--reclaimed {
+  background: color.mix(t.$verdigris, t.$paper, 30%);
+  color: t.$verdigris-dark;
+}
+.map__cell--building {
+  background: t.$paper;
+  color: t.$ink;
+  font-weight: 700;
+  border-color: t.$ink;
+}
+.map__cell--unstaffed {
+  opacity: 0.55;
+}
+.map__cell--clickable {
+  cursor: pointer;
+  background: color.mix(t.$verdigris, t.$paper, 35%);
+  outline: 2px solid t.$verdigris;
+  outline-offset: -2px;
+  color: t.$verdigris-dark;
+
+  &:hover {
+    background: t.$verdigris;
+    color: t.$paper;
+  }
+}
+.map__cell:disabled {
+  cursor: default;
+}
+.map__cell--preview-ok {
+  background: color.mix(t.$verdigris, t.$paper, 55%);
+  outline: 1px dashed t.$verdigris-dark;
+  outline-offset: -1px;
+}
+.map__cell--preview-bad {
+  background: color.mix(t.$brick, t.$paper, 45%);
+  outline: 1px dashed t.$brick;
+  outline-offset: -1px;
+}
+
+.map__legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 14px;
+  margin-top: 10px;
+  font-size: 0.75rem;
+  color: t.$ink-soft;
+
+  .map__swatch {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    margin-right: 4px;
+    font-style: normal;
+    font-family: t.$font-mono;
+    font-size: 0.7rem;
+    border: 1px solid rgba(t.$ink, 0.15);
+    vertical-align: middle;
+  }
+}
+
+// --- Trade / Culture grids ---------------------------------------------
+.trade__row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  margin-bottom: 8px;
+  font-family: t.$font-mono;
+}
+
+// Every row (cells, column markers, column rewards) is a grid sharing the exact
+// same column template (set inline, per Culture — see Culture.tsx), so cells
+// placed by `gridColumn` line up precisely across rows regardless of how many
+// cells a given row actually has.
+.culture__row {
+  display: grid;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 8px;
+  font-family: t.$font-mono;
+}
+
+.trade__cell,
+.culture__cell {
+  width: 26px;
+  height: 26px;
+  border: 1px solid t.$ink;
+  background: t.$paper;
+  cursor: pointer;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+.trade__cell.is-filled,
+.culture__cell.is-filled {
+  background: t.$verdigris;
+  color: t.$paper;
+  border-color: t.$verdigris-dark;
+}
+.trade__cell.is-next:not(.is-filled) {
+  border-color: t.$gold;
+  border-width: 2px;
+}
+
+.trade__reward {
+  margin-left: 8px;
+  font-size: 0.72rem;
+  color: t.$ink-soft;
+  // Longer reward text (e.g. "+1 Happiness, +3 Gold, +2 Culture") won't fit next
+  // to the caravan's dice cells at panel width — flex-basis: 100% drops it to its
+  // own line under the cells instead of overflowing the panel.
+  flex-basis: 100%;
+}
+
+.trade__row.is-complete .trade__reward {
+  color: t.$verdigris-dark;
+  font-weight: 700;
+}
+
+// Badged like .culture__reward-cell below, so a row's payout reads with the same
+// weight as a column's — both are "the reward," just on different schedules.
+.culture__row-score {
+  margin-left: 8px;
+  padding: 3px 6px;
+  font-size: 0.7rem;
+  white-space: nowrap;
+  color: t.$ink-soft;
+  border: 1px solid t.$paper-line;
+  border-radius: t.$radius;
+  background: color.mix(t.$slate, t.$paper, 8%);
+  cursor: default;
+
+  &.is-complete {
+    color: t.$ink;
+    font-weight: 700;
+    background: color.mix(t.$verdigris, t.$paper, 30%);
+    border-color: t.$verdigris-dark;
+  }
+}
+
+.culture__row--columns {
+  margin-top: 4px;
+  padding-top: 6px;
+  border-top: 1px dashed t.$ink-soft;
+}
+
+.culture__col-marker {
+  width: 26px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  color: t.$ink-soft;
+
+  &.is-complete {
+    color: t.$gold;
+    font-weight: 700;
+  }
+}
+
+.culture__row--rewards {
+  margin-top: 0;
+}
+
+.culture__reward-cell {
+  width: 26px;
+  min-height: 26px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  padding: 2px 0;
+  border: 1px solid t.$paper-line;
+  border-radius: t.$radius;
+  background: color.mix(t.$slate, t.$paper, 12%);
+  cursor: default;
+
+  &.is-complete {
+    background: color.mix(t.$gold, t.$paper, 30%);
+    border-color: t.$gold;
+  }
+}
+
+.culture__reward-glyph {
+  font-size: 0.62rem;
+  line-height: 1.1;
+  color: t.$ink-soft;
+
+  .culture__reward-cell.is-complete & {
+    color: t.$ink;
+    font-weight: 700;
+  }
+}
+
+// --- Deployment / Disasters / Anytime ------------------------------------
+.deployment__actions,
+.anytime__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.deployment__revolt-choice {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.8rem;
+  color: t.$ink-soft;
+}
+
+.disasters__drought-choice {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  margin-bottom: 10px;
+
+  .hint {
+    margin: 0;
+    flex-basis: 100%;
+  }
+}
+
+.disasters__rows {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: t.$font-mono;
+  font-size: 0.78rem;
+}
+
+.disasters__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.disasters__die {
+  width: 18px;
+  text-align: center;
+  color: t.$ink-soft;
+  font-weight: 700;
+}
+
+.disasters__boxes {
+  display: flex;
+  gap: 2px;
+}
+
+.disasters__box {
+  width: 10px;
+  height: 10px;
+  border: 1px solid t.$ink-faint;
+  display: inline-block;
+}
+.disasters__box.is-filled {
+  background: t.$brick;
+  border-color: t.$brick;
+}
+
+.disasters__name {
+  color: t.$ink-soft;
+}
+.disasters__row.is-triggered .disasters__name {
+  color: t.$brick;
+  font-weight: 700;
+}
+.disasters__row {
+  cursor: help; // signals the hover tooltip explaining the row's effect
+}
+.disasters__culture-flag {
+  color: t.$verdigris;
+  font-weight: 700;
+}
+
+// --- Log ----------------------------------------------------------------
+.log__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 480px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.log__entry {
+  font-size: 0.78rem;
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px dashed t.$paper-line;
+  padding-bottom: 6px;
+}
+
+.log__round {
+  font-family: t.$font-mono;
+  color: t.$verdigris-dark;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+// --- Scoreboard -----------------------------------------------------------
+.scoreboard-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(t.$ink, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 10;
+}
+
+.scoreboard {
+  background: t.$paper;
+  border-radius: t.$radius;
+  padding: 28px 32px;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: 0 12px 40px rgba(t.$ink, 0.4);
+
+  h2 {
+    font-family: t.$font-display;
+    margin-top: 0;
+    font-size: 1.3rem;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: t.$font-mono;
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+
+    td {
+      padding: 4px 0;
+      border-bottom: 1px dashed t.$paper-line;
+    }
+    td:last-child {
+      text-align: right;
+      font-weight: 700;
+    }
+    tfoot td {
+      border-top: 2px solid t.$ink;
+      border-bottom: none;
+      font-size: 1.1rem;
+      padding-top: 8px;
+    }
+  }
+}

@@ -1,0 +1,38 @@
+@use './tokens' as t;
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: t.$paper-dark;
+  // Faint graph-paper grid, echoing the printed Empire sheet.
+  background-image: linear-gradient(rgba(t.$ink, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(t.$ink, 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+  color: t.$ink;
+  font-family: t.$font-body;
+}
+
+button {
+  font-family: inherit;
+}
+
+::selection {
+  background: rgba(t.$verdigris, 0.35);
+}
+
+:focus-visible {
+  outline: 2px solid t.$verdigris;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}

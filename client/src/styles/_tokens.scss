@@ -1,0 +1,23 @@
+// Design tokens — see /README.md "Design notes" for the reasoning.
+
+// Palette: aged parchment ledger + weathered bronze/verdigris, not the
+// terracotta-on-cream or acid-green-on-black defaults.
+$paper: #e7e0cc;
+$paper-dark: #d9cfb0;
+$paper-line: #c9bd9a;
+$ink: #241f1a;
+$ink-soft: #5b5142;
+$ink-faint: #8a7f66;
+
+$verdigris: #3f6259; // structure / science / primary accent
+$verdigris-dark: #2c4842;
+$brick: #8c4433; // disasters / danger
+$gold: #93711f; // currency
+$slate: #445566; // population / info
+
+$font-display: 'Cinzel', 'Georgia', serif;
+$font-body: 'Open Sans', system-ui, sans-serif;
+$font-mono: 'Courier Prime', 'Courier New', monospace;
+
+$radius: 3px;
+$shadow-card: 0 1px 0 rgba($ink, 0.06), 0 2px 6px rgba($ink, 0.08);
