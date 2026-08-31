@@ -1,0 +1,11 @@
+services:
+  web:
+    build: .
+    container_name: ascii-empires-client
+    restart: unless-stopped
+    # This container has no native DB/API dependency to preserve (it's a
+    # fully static build - see CLAUDE.md), but host networking keeps the
+    # deploy pattern uniform with server/ and the rest of the fleet, and
+    # matches nginx's proxy_pass expectation of a fixed host port (6100,
+    # baked into client/nginx.conf).
+    network_mode: host

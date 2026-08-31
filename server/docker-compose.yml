@@ -1,0 +1,16 @@
+services:
+  web:
+    build: .
+    container_name: ascii-empires-server
+    restart: unless-stopped
+    # Postgres stays native on the host (see DEPLOY.md), so the container
+    # shares the host's network namespace instead of a bridge network,
+    # same pattern as the rest of the fleet (store/go-server,
+    # derekgarnett.com). This keeps DB_HOST=localhost in .env working
+    # unchanged and lets nginx proxy_pass to 127.0.0.1:$PORT.
+    #
+    # For local dev, use docker-compose.dev.yml instead (a containerized
+    # Postgres, not this service) - this file is prod-only.
+    network_mode: host
+    env_file:
+      - .env

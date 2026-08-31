@@ -1,0 +1,10 @@
+.git
+.gitignore
+.env
+.env.example
+main
+tmp
+*.md
+.air.toml
+docker-compose.dev.yml
+docker-compose.yml
