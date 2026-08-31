@@ -1,0 +1,49 @@
+// --- Scoreboard -----------------------------------------------------------
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(var(--ink-rgb), 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 10;
+}
+
+.scoreboard {
+  background: var(--paper);
+  border-radius: var(--radius);
+  padding: 28px 32px;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: 0 12px 40px rgba(var(--ink-rgb), 0.4);
+
+  h2 {
+    font-family: var(--font-display);
+    margin-top: 0;
+    font-size: 1.3rem;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+
+    td {
+      padding: 4px 0;
+      border-bottom: 1px dashed var(--paper-line);
+    }
+    td:last-child {
+      text-align: right;
+      font-weight: 700;
+    }
+    tfoot td {
+      border-top: 2px solid var(--ink);
+      border-bottom: none;
+      font-size: 1.1rem;
+      padding-top: 8px;
+    }
+  }
+}

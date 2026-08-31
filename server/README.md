@@ -31,3 +31,8 @@ make run                # or `make watch` for live reload via air
 ```
 
 `make test` runs the engine's Go test suite.
+
+## Deploy
+
+`Dockerfile` + `docker-compose.yml` (prod, distinct from `docker-compose.dev.yml`'s
+containerized Postgres) — see the repo root's `DEPLOY.md`.

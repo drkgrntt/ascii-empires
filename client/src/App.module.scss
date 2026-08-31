@@ -1,0 +1,106 @@
+.app {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px 20px 64px;
+}
+
+// --- Header -------------------------------------------------------------
+.header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.3rem, 2.6vw, 2rem);
+    letter-spacing: 0.04em;
+    margin: 0;
+    color: var(--ink);
+  }
+}
+
+.titleAscii {
+  font-family: var(--font-mono);
+  color: var(--verdigris);
+  margin-right: 10px;
+  font-size: 0.85em;
+}
+
+.titleSub {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 0.5em;
+  color: var(--ink-soft);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.round {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 4px 10px;
+  border-radius: var(--radius);
+}
+
+// --- Dice (App's half — DiceTray itself lives in DiceTray/DiceTray.module.scss) --
+.diceRow {
+  margin-bottom: 18px;
+}
+
+.selectedHint {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--verdigris-dark);
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+.dieModify {
+  display: inline-flex;
+  gap: 6px;
+  margin-left: 10px;
+
+  :global(.btn) {
+    padding: 2px 8px;
+    font-size: 0.8rem;
+  }
+}
+
+// --- Grid layout ----------------------------------------------------------
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+@media (max-width: 1100px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

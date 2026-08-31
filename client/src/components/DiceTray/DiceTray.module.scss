@@ -1,0 +1,74 @@
+// Native color-mix() (from the Part A token migration) needs no `@use 'sass:color'`.
+.diceTray {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  padding: 14px 0;
+  position: relative;
+
+  &::before {
+    content: '≈≈≈ the Mediterranean ≈≈≈';
+    position: absolute;
+    inset: 0 0 auto 0;
+    text-align: center;
+    top: -14px;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    color: var(--ink-faint);
+  }
+}
+
+.die {
+  width: 58px;
+  height: 58px;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-family: var(--font-mono);
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+.dieFace {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.dieValue {
+  font-size: 0.6rem;
+  color: var(--ink-faint);
+}
+
+.white {
+  background: var(--paper);
+}
+.green {
+  background: color-mix(in srgb, var(--verdigris) 25%, var(--paper));
+}
+.black {
+  background: color-mix(in srgb, var(--ink) 55%, var(--paper));
+  color: var(--paper);
+
+  .dieValue {
+    color: var(--paper-dark);
+  }
+}
+.locked {
+  opacity: 0.35;
+}
+.used {
+  opacity: 0.3;
+  text-decoration: line-through;
+}
+.selected {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+}

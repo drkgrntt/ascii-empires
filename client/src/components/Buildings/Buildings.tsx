@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { BUILDING_DEFS, BUILDING_ORDER, SCIENCE_BRANCHES, SCIENCE_BRANCH_ORDER, SCIENCE_TRUNK_LENGTH } from '../engine/gameData'
-import type { BuildingType, Die, GameState, ScienceBranchId, ScienceTarget } from '../engine/types'
-import type { Action } from '../engine/reducer'
+import { BUILDING_DEFS, BUILDING_ORDER, SCIENCE_BRANCHES, SCIENCE_BRANCH_ORDER, SCIENCE_TRUNK_LENGTH } from '../../engine/gameData'
+import type { BuildingType, Die, GameState, ScienceBranchId, ScienceTarget } from '../../engine/types'
+import type { Action } from '../../engine/reducer'
+import styles from './Buildings.module.scss'
 
 interface Props {
   state: GameState
@@ -47,10 +48,10 @@ export function Buildings({ state, dispatch, selectedDie, onDieConsumed, pending
   const staffedOf = (t: BuildingType) => state.buildings.filter((b) => b.type === t && b.staffed).length
 
   return (
-    <section className="panel buildings" data-tutorial="buildings">
+    <section className="panel" data-tutorial="buildings">
       <h3 className="panel__title">Buildings</h3>
 
-      <div className="buildings__construction">
+      <div className={styles.construction}>
         <span>
           Construction lines available: <strong>{state.constructionPoints}</strong>
         </span>
@@ -82,8 +83,8 @@ export function Buildings({ state, dispatch, selectedDie, onDieConsumed, pending
         )}
       </div>
 
-      <div className="buildings__table-wrap">
-        <table className="buildings__table">
+      <div className={styles.tableWrap}>
+        <table className={styles.table}>
           <colgroup>
             <col style={{ width: '24%' }} />
             <col style={{ width: '8%' }} />
@@ -110,7 +111,7 @@ export function Buildings({ state, dispatch, selectedDie, onDieConsumed, pending
               const canActivate =
                 inDev && selectedDie && !selectedDie.usedFor && selectedDie.value >= def.minActivationDie && staffed > 0 && def.minActivationDie > 0
               return (
-                <tr key={t} className={pendingBuild === t ? 'is-placing' : undefined}>
+                <tr key={t} className={pendingBuild === t ? styles.isPlacing : undefined}>
                   <td>{def.name}</td>
                   <td>{def.level}</td>
                   <td>{def.lineCost || '—'}</td>
@@ -118,7 +119,7 @@ export function Buildings({ state, dispatch, selectedDie, onDieConsumed, pending
                   <td>
                     {built} ({staffed})
                   </td>
-                  <td className="buildings__actions">
+                  <td className={styles.actions}>
                     {def.lineCost > 0 && (
                       <button
                         className="btn btn--small"
@@ -130,7 +131,6 @@ export function Buildings({ state, dispatch, selectedDie, onDieConsumed, pending
                     )}
                     {t === 'school' && scienceTargets.length > 1 && (
                       <select
-                        className="buildings__science-target"
                         value={activeScienceTarget}
                         onChange={(e) => setScienceTarget(e.target.value as ScienceTarget)}
                       >
@@ -178,7 +178,7 @@ export function Buildings({ state, dispatch, selectedDie, onDieConsumed, pending
       )}
       {countOf('colony') > 0 && <p className="hint">Colony built ({staffedOf('colony')} staffed).</p>}
       {staffedOf('colony') > 0 && (
-        <div className="buildings__colony-activate">
+        <div className={styles.colonyActivate}>
           <label>
             Colony boost target:{' '}
             <select value={boostTarget} onChange={(e) => setBoostTarget(e.target.value as BuildingType)}>

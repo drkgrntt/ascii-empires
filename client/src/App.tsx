@@ -1,21 +1,21 @@
 import { useState } from 'react'
 import { useGame } from './hooks/useGame'
 import { useTutorial } from './hooks/useTutorial'
-import { TutorialOverlay } from './components/TutorialOverlay'
-import { DiceTray } from './components/DiceTray'
-import { PhaseBar } from './components/PhaseBar'
-import { EmpireTracks } from './components/EmpireTracks'
-import { Buildings } from './components/Buildings'
-import { Map } from './components/Map'
-import { Trade } from './components/Trade'
-import { Culture } from './components/Culture'
-import { Deployment } from './components/Deployment'
-import { Disasters } from './components/Disasters'
-import { AnytimeActions } from './components/AnytimeActions'
-import { Log } from './components/Log'
-import { Scoreboard } from './components/Scoreboard'
+import { TutorialOverlay } from './components/TutorialOverlay/TutorialOverlay'
+import { DiceTray } from './components/DiceTray/DiceTray'
+import { PhaseBar } from './components/PhaseBar/PhaseBar'
+import { EmpireTracks } from './components/EmpireTracks/EmpireTracks'
+import { Buildings } from './components/Buildings/Buildings'
+import { Map } from './components/Map/Map'
+import { Trade } from './components/Trade/Trade'
+import { Culture } from './components/Culture/Culture'
+import { Deployment } from './components/Deployment/Deployment'
+import { Disasters } from './components/Disasters/Disasters'
+import { AnytimeActions } from './components/AnytimeActions/AnytimeActions'
+import { Log } from './components/Log/Log'
+import { Scoreboard } from './components/Scoreboard/Scoreboard'
 import type { BuildingType } from './engine/types'
-import './App.scss'
+import styles from './App.module.scss'
 
 export default function App() {
   const { state, dispatch } = useGame()
@@ -37,16 +37,16 @@ export default function App() {
   }
 
   return (
-    <div className="app">
-      <header className="app__header" data-tutorial="header">
+    <div className={styles.app}>
+      <header className={styles.header} data-tutorial="header">
         <h1>
-          <span className="app__title-ascii">[####]</span> ASCII EMPIRES <span className="app__title-sub">— solo campaign</span>
+          <span className={styles.titleAscii}>[####]</span> ASCII EMPIRES <span className={styles.titleSub}>— solo campaign</span>
         </h1>
-        <div className="app__header-right">
+        <div className={styles.headerRight}>
           <button className="btn btn--small" title="Replay the guided tutorial" onClick={tutorial.start}>
             ? Tutorial
           </button>
-          <div className="app__round">
+          <div className={styles.round}>
             Round {state.round} / {state.maxRounds}
           </div>
         </div>
@@ -54,7 +54,7 @@ export default function App() {
 
       <PhaseBar state={state} dispatch={dispatch} selectedDieId={selectedDieId} onClearSelection={clearSelection} />
 
-      <div className="app__dice-row">
+      <div className={styles.diceRow}>
         <DiceTray
           dice={state.dice}
           diceUnlocked={state.diceUnlocked}
@@ -63,9 +63,9 @@ export default function App() {
           selectable={state.phase === 'diplomacy' || state.phase === 'development'}
         />
         {selectedDie && state.phase === 'development' && (
-          <div className="app__selected-hint">
+          <div className={styles.selectedHint}>
             Selected: {selectedDie.color} die showing {selectedDie.value}. Choose where to spend it below.
-            <span className="app__die-modify">
+            <span className={styles.dieModify}>
               <button
                 className="btn btn--small"
                 disabled={state.gold < 1}
@@ -94,14 +94,14 @@ export default function App() {
         onCancelPlacement={() => setPendingBuild(null)}
       />
 
-      <main className="app__grid">
-        <div className="app__col">
+      <main className={styles.grid}>
+        <div className={styles.col}>
           <EmpireTracks state={state} />
           <AnytimeActions state={state} dispatch={dispatch} />
           <Disasters state={state} dispatch={dispatch} />
         </div>
 
-        <div className="app__col">
+        <div className={styles.col}>
           <Buildings
             state={state}
             dispatch={dispatch}
@@ -113,12 +113,12 @@ export default function App() {
           <Deployment state={state} dispatch={dispatch} />
         </div>
 
-        <div className="app__col">
+        <div className={styles.col}>
           <Trade state={state} dispatch={dispatch} selectedDie={selectedDie} onDieConsumed={clearSelection} />
           <Culture state={state} dispatch={dispatch} selectedDie={selectedDie} onDieConsumed={clearSelection} />
         </div>
 
-        <div className="app__col">
+        <div className={styles.col}>
           <Log entries={state.log} />
         </div>
       </main>

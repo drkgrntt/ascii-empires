@@ -1,4 +1,5 @@
-import type { ScoreBreakdown } from '../engine/types'
+import type { ScoreBreakdown } from '../../engine/types'
+import styles from './Scoreboard.module.scss'
 
 const ROWS: { key: keyof ScoreBreakdown; label: string }[] = [
   { key: 'farms', label: 'Farms' },
@@ -16,8 +17,8 @@ const ROWS: { key: keyof ScoreBreakdown; label: string }[] = [
 
 export function Scoreboard({ score, onRestart }: { score: ScoreBreakdown; onRestart: () => void }) {
   return (
-    <div className="scoreboard-overlay">
-      <div className="scoreboard">
+    <div className={styles.overlay}>
+      <div className={styles.scoreboard}>
         <h2>Your Empire's Final Score</h2>
         <table>
           <tbody>

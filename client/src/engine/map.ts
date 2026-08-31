@@ -6,14 +6,25 @@
 // the map and are reclaimed (for a free Colony) once attacked.
 //
 // Sized and laid out to match the scanned sheet (docs/ASCII_Empires_Player_Sheet_Color.pdf):
-// a 27x23 grid, measured directly off the sheet's colored zones (Plains = green,
-// Mountains = tan, Barbarian territory = salmon). Two things about the real sheet
-// are easy to miss at a glance and matter for map fidelity:
-//  - Mountains, not Plains, are the *dominant* terrain — the tan zone covers most of
-//    the map's northern two-thirds. The only *free* land up there is a one-column
-//    Plains corridor hugging each side of the strait; the rest costs 1 Gold to build on.
-//  - The southern "Barbarian territory" band (salmon) is cosmetic, not a third terrain:
-//    it's fully buildable ground, just tinted to mark it as raid-prone.
+// a 27x23 grid, measured directly off the sheet's colored zones and the MAP LEGEND's
+// own swatch fills (confirmed from the PDF's actual vector fill colors, not just a
+// raster read): Plains = green/tan (No building restrictions), Mountains = salmon
+// (Ø to build) — the same salmon used for the "Barbarians" swatch right below it in
+// the legend, because Barbarian camps sit *in* the Mountains, not on a separate
+// cosmetic band. Two things are easy to miss at a glance and matter for map fidelity:
+//  - The southern "Barbarian territory" band (salmon) IS the Mountains terrain, not a
+//    cosmetic tint over Plains — it costs 1 Gold to build on, same as any Mountains.
+//    It's also the *larger* of the two bands (roughly 12-13 of 21 land rows per
+//    column vs. 8-9), so Mountains, not Plains, are the dominant terrain overall —
+//    just dominant in the south, not the north as a first glance suggests.
+//  - The dominant northern region (green/tan) plus the one-column corridor flanking
+//    the strait are both free-to-build Plains; the corridor isn't a separate strip of
+//    "extra-free" land carved out of an otherwise-costly north, since the whole north
+//    is already Plains.
+// This also matches the rulebook's own text (p.5, independent of any sheet colors):
+// Ore deposits are "mostly, but not exclusively, located in the Mountains" — 6 of the
+// 8 sit in the southern (salmon/Mountains) band and 2 in the northern (green/Plains)
+// region, a 75/25 split that fits "mostly, not exclusively" exactly.
 // See README for what's exact vs. simplified for solo play.
 import type { BuildingType, GameState, MapCoord, Terrain } from './types'
 
@@ -29,11 +40,11 @@ function straitColumn(y: number): number | null {
   return y <= 6 ? 11 : 10
 }
 
-// Per-column row at which the Barbarian-territory tint begins (measured off the
-// sheet — the boundary steps in a couple of places, mirroring the strait's own jog).
-// The three strait-corridor columns (9-11) stay untinted Plains all the way down —
-// on the sheet that strip reads green, never salmon — except at the very last row,
-// where the strait has closed up and the tint reaches all the way across.
+// Per-column row at which the Mountains/Barbarian-territory band begins (measured
+// off the sheet — the boundary steps in a couple of places, mirroring the strait's
+// own jog). The three strait-corridor columns (9-11) stay Plains (green) all the way
+// down — the corridor is never Mountains — except at the very last row, where the
+// strait has closed up and the Mountains band reaches all the way across.
 const LAST_ROW = MAP_HEIGHT - 1
 const BORDERLANDS_START_ROW_BY_COL = [
   10, 10, 11, 11, 11, 11, 11, 11, 11, LAST_ROW, LAST_ROW, LAST_ROW, 11, 11, 11, 11, 10,
@@ -44,9 +55,11 @@ export function isBorderlands(x: number, y: number): boolean {
   return y >= (BORDERLANDS_START_ROW_BY_COL[x] ?? 11)
 }
 
-// Ore deposits (needed to build a Mine): 2 sit in the northern Mountains band itself
-// (so that Mine costs the usual 1 Gold, same as any other building on Mountains),
-// the other 6 in the south.
+// Ore deposits (needed to build a Mine): 2 sit in the northern Plains region (free
+// to build on, so a Mine there costs no Gold), the other 6 in the southern
+// Mountains band itself (so a Mine there still costs the usual 1 Gold, same as any
+// other building on Mountains) — a 6/8 majority, matching the rulebook's own text
+// (p.5): Ore deposits are "mostly, but not exclusively, located in the Mountains."
 export const ORE_CELLS: MapCoord[] = [
   { x: 20, y: 6 },
   { x: 2, y: 9 },
@@ -69,8 +82,10 @@ export const BARBARIAN_SITES: MapCoord[] = [
 ]
 
 // The sea borders the north edge, a winding strait splits the land into two coasts,
-// a one-column Plains corridor flanks the strait, Barbarian territory (south) is
-// buildable ground, and everything else north of it is blocked Mountains.
+// a one-column Plains corridor flanks the strait, the dominant northern region is
+// also free Plains, and the southern Barbarian-territory band is costly Mountains
+// (Ø to build) — matching the MAP LEGEND's own swatch fills on the sheet, where
+// "Mountains" and "Barbarians" share the same salmon color.
 function computeTerrain(x: number, y: number): Terrain {
   if (y <= 1) return 'water'
   const strait = straitColumn(y)
@@ -78,8 +93,8 @@ function computeTerrain(x: number, y: number): Terrain {
     if (x === strait) return 'water'
     if (x === strait - 1 || x === strait + 1) return 'plains'
   }
-  if (isBorderlands(x, y)) return 'plains'
-  return 'mountains'
+  if (isBorderlands(x, y)) return 'mountains'
+  return 'plains'
 }
 
 export const MAP_TERRAIN: Terrain[][] = Array.from({ length: MAP_HEIGHT }, (_, y) =>
@@ -212,8 +227,9 @@ export function canPlaceBuilding(s: GameState, type: BuildingType, x: number, y:
   // Mountains don't block building — "Ø to build" is the sheet's Gold-cost symbol
   // (Symbols table, rulebook p.11), not a prohibition. If any part of a building's
   // outline touches Mountainous terrain it costs 1 Gold, and you simply can't build
-  // there with none (rulebook p.5). The 2 Ore deposits sitting on Mountains work the
-  // same way — a Mine there still costs the 1 Gold.
+  // there with none (rulebook p.5). The 6 Ore deposits sitting on Mountains (in the
+  // southern Barbarian-territory band) work the same way — a Mine there still costs
+  // the 1 Gold.
   if (cells.some((c) => terrainAt(c.x, c.y) === 'mountains') && s.gold < 1) {
     return { ok: false, reason: 'Building on Mountains costs 1 Gold, and you have none.' }
   }

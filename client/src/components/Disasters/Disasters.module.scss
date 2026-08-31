@@ -1,0 +1,62 @@
+.droughtChoice {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  margin-bottom: 10px;
+
+  :global(.hint) {
+    margin: 0;
+    flex-basis: 100%;
+  }
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: help; // signals the hover tooltip explaining the row's effect
+}
+
+.die {
+  width: 18px;
+  text-align: center;
+  color: var(--ink-soft);
+  font-weight: 700;
+}
+
+.boxes {
+  display: flex;
+  gap: 2px;
+}
+
+.box {
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--ink-faint);
+  display: inline-block;
+}
+.box.isFilled {
+  background: var(--brick);
+  border-color: var(--brick);
+}
+
+.name {
+  color: var(--ink-soft);
+}
+.row.isTriggered .name {
+  color: var(--brick);
+  font-weight: 700;
+}
+.cultureFlag {
+  color: var(--verdigris);
+  font-weight: 700;
+}

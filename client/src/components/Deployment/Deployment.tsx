@@ -1,6 +1,7 @@
-import { BUILDING_DEFS } from '../engine/gameData'
-import type { GameState } from '../engine/types'
-import type { Action } from '../engine/reducer'
+import { BUILDING_DEFS } from '../../engine/gameData'
+import type { GameState } from '../../engine/types'
+import type { Action } from '../../engine/reducer'
+import styles from './Deployment.module.scss'
 
 export function Deployment({ state, dispatch }: { state: GameState; dispatch: React.Dispatch<Action> }) {
   const totalArmies = Math.floor(state.militaryBoxes.filter(Boolean).length / 2)
@@ -13,7 +14,7 @@ export function Deployment({ state, dispatch }: { state: GameState; dispatch: Re
     .filter((x) => x.b.staffed && x.b.type !== 'palace')
 
   return (
-    <section className="panel deployment" data-tutorial="deployment">
+    <section className="panel" data-tutorial="deployment">
       <h3 className="panel__title">Deployment ({available} Army power free)</h3>
       {(state.bankedAttackPower > 0 || state.bankedDefensePower > 0) && (
         <p className="hint">
@@ -22,7 +23,7 @@ export function Deployment({ state, dispatch }: { state: GameState; dispatch: Re
           {state.bankedDefensePower > 0 && `${state.bankedDefensePower} Defense`} Power (Iron/Walls double each Army deployed).
         </p>
       )}
-      <div className="deployment__actions">
+      <div className={styles.actions}>
         <button className="btn btn--small" disabled={!active || !canAttack || state.barbarianCamps <= 0} onClick={() => dispatch({ type: 'DEPLOY_BARBARIAN' })}>
           Attack a Barbarian camp ({state.barbarianCamps} left) → +3 Gold
         </button>
@@ -42,9 +43,9 @@ export function Deployment({ state, dispatch }: { state: GameState; dispatch: Re
           the moment the Revolt actually resolves (round's end, still unanswered),
           not pre-picked earlier while there was still a chance to prevent it. */}
       {state.pendingRevoltSacrifice && (
-        <div className="deployment__revolt-choice">
+        <div className={styles.revoltChoice}>
           <p className="hint">The Revolt struck — choose which building to sacrifice:</p>
-          <div className="deployment__actions">
+          <div className={styles.actions}>
             {sacrificeCandidates.map(({ b, i }) => (
               <button
                 key={i}

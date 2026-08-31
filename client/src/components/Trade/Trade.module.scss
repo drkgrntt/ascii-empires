@@ -1,0 +1,54 @@
+// --- Trade / Culture grids ---------------------------------------------
+.row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  margin-bottom: 8px;
+  font-family: var(--font-mono);
+}
+
+// Shared cell look — duplicated verbatim in Culture/Culture.module.scss (also
+// .cell) — both sides of a combined selector originally shared as
+// `.trade__cell, .culture__cell` in App.scss.
+.cell {
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  cursor: pointer;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+.cell.isFilled {
+  background: var(--verdigris);
+  color: var(--paper);
+  border-color: var(--verdigris-dark);
+}
+.cell.isNext:not(.isFilled) {
+  border-color: var(--gold);
+  border-width: 2px;
+}
+
+.reward {
+  margin-left: 8px;
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+  // Longer reward text (e.g. "+1 Happiness, +3 Gold, +2 Culture") won't fit next
+  // to the caravan's dice cells at panel width — flex-basis: 100% drops it to its
+  // own line under the cells instead of overflowing the panel.
+  flex-basis: 100%;
+}
+
+.row.isComplete .reward {
+  color: var(--verdigris-dark);
+  font-weight: 700;
+}

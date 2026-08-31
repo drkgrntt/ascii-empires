@@ -1,7 +1,9 @@
 import { useState } from 'react'
-import { BUILDING_DEFS } from '../engine/gameData'
-import { MAP_HEIGHT, MAP_WIDTH, buildingFootprint, canPlaceBuilding, isBorderlands, isOreCell, terrainAt } from '../engine/map'
-import type { BuildingType, GameState } from '../engine/types'
+import clsx from 'clsx'
+import { BUILDING_DEFS } from '../../engine/gameData'
+import { MAP_HEIGHT, MAP_WIDTH, buildingFootprint, canPlaceBuilding, isOreCell, terrainAt } from '../../engine/map'
+import type { BuildingType, GameState, Terrain } from '../../engine/types'
+import styles from './Map.module.scss'
 
 interface Props {
   state: GameState
@@ -17,6 +19,15 @@ const BUILDING_GLYPH: Record<BuildingType, string> = {
   garrison: 'G',
   colony: 'C',
   palace: 'P',
+}
+
+// 'plains' has no dedicated tint (the base .cell background covers it), so it
+// maps to undefined here — clsx drops falsy entries, same effect as the old
+// dead `map__cell--plains` className this replaces.
+const TERRAIN_CLASS: Record<Terrain, string | undefined> = {
+  water: styles.water,
+  plains: undefined,
+  mountains: styles.mountains,
 }
 
 const ROWS = Array.from({ length: MAP_HEIGHT }, (_, y) => y)
@@ -35,18 +46,18 @@ export function Map({ state, pendingBuild, onCellClick, onCancelPlacement }: Pro
   const isPreview = (x: number, y: number) => previewCells.some((c) => c.x === x && c.y === y)
 
   return (
-    <section className="panel map" data-tutorial="map">
+    <section className={clsx('panel', styles.map)} data-tutorial="map">
       <h3 className="panel__title">
         Map
         {pendingBuild && (
-          <button className="btn btn--small map__cancel" onClick={onCancelPlacement}>
+          <button className={clsx('btn btn--small', styles.cancel)} onClick={onCancelPlacement}>
             Cancel
           </button>
         )}
       </h3>
 
-      <div className="map__grid-wrap">
-        <div className="map__grid" style={{ gridTemplateColumns: `repeat(${MAP_WIDTH}, 1fr)` }}>
+      <div className={styles.gridWrap}>
+        <div className={styles.grid} style={{ gridTemplateColumns: `repeat(${MAP_WIDTH}, 1fr)` }}>
           {ROWS.map((y) =>
             COLS.map((x) => {
               const terrain = terrainAt(x, y)
@@ -63,7 +74,7 @@ export function Map({ state, pendingBuild, onCellClick, onCancelPlacement }: Pro
               }
               if (terrain === 'mountains') {
                 glyph = '^'
-                title = 'Mountains — costs 1 Gold to build'
+                title = 'Mountains (Barbarian territory) — costs 1 Gold to build'
               }
               if (ore) {
                 glyph = '*'
@@ -82,26 +93,21 @@ export function Map({ state, pendingBuild, onCellClick, onCancelPlacement }: Pro
                 title = `${BUILDING_DEFS[building.type].name}${building.staffed ? '' : ' (unstaffed)'}`
               }
 
-              const classes = [
-                'map__cell',
-                `map__cell--${terrain}`,
-                terrain === 'plains' && isBorderlands(x, y) && 'map__cell--borderlands',
-                ore && 'map__cell--ore',
-                camp && !camp.destroyed && 'map__cell--barbarian',
-                camp?.destroyed && !building && 'map__cell--reclaimed',
-                building && 'map__cell--building',
-                building && !building.staffed && 'map__cell--unstaffed',
-                clickable && 'map__cell--clickable',
-                isPreview(x, y) && (previewOk ? 'map__cell--preview-ok' : 'map__cell--preview-bad'),
-              ]
-                .filter(Boolean)
-                .join(' ')
-
               return (
                 <button
                   key={`${x}-${y}`}
                   type="button"
-                  className={classes}
+                  className={clsx(
+                    styles.cell,
+                    TERRAIN_CLASS[terrain],
+                    ore && styles.ore,
+                    camp && !camp.destroyed && styles.barbarian,
+                    camp?.destroyed && !building && styles.reclaimed,
+                    building && styles.building,
+                    building && !building.staffed && styles.unstaffed,
+                    clickable && styles.clickable,
+                    isPreview(x, y) && (previewOk ? styles.previewOk : styles.previewBad),
+                  )}
                   title={title}
                   disabled={!clickable}
                   onMouseEnter={() => pendingBuild && setHover({ x, y })}
@@ -116,27 +122,24 @@ export function Map({ state, pendingBuild, onCellClick, onCancelPlacement }: Pro
         </div>
       </div>
 
-      <div className="map__legend">
+      <div className={styles.legend}>
         <span>
-          <i className="map__swatch map__cell--water">~</i> Water
+          <i className={clsx(styles.swatch, styles.water)}>~</i> Water
         </span>
         <span>
-          <i className="map__swatch map__cell--plains">.</i> Plains
+          <i className={styles.swatch}>.</i> Plains
         </span>
         <span>
-          <i className="map__swatch map__cell--mountains">^</i> Mountains (1 Gold to build)
+          <i className={clsx(styles.swatch, styles.mountains)}>^</i> Mountains / Barbarian territory (1 Gold to build)
         </span>
         <span>
-          <i className="map__swatch map__cell--borderlands">.</i> Barbarian territory
+          <i className={clsx(styles.swatch, styles.ore)}>*</i> Ore (Mines)
         </span>
         <span>
-          <i className="map__swatch map__cell--ore">*</i> Ore (Mines)
+          <i className={clsx(styles.swatch, styles.barbarian)}>B</i> Barbarian camp
         </span>
         <span>
-          <i className="map__swatch map__cell--barbarian">B</i> Barbarian camp
-        </span>
-        <span>
-          <i className="map__swatch map__cell--reclaimed">o</i> Reclaimed (Colony)
+          <i className={clsx(styles.swatch, styles.reclaimed)}>o</i> Reclaimed (Colony)
         </span>
       </div>
 

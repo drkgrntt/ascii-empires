@@ -308,7 +308,10 @@ func TestDestroyedBuildingFootprintStaysBlocked(t *testing.T) {
 	if CanPlaceBuilding(s, BuildingFarm, 10, 11).OK {
 		t.Error("expected adjacent-cell build blocked by touching a ruin")
 	}
-	if !CanPlaceBuilding(s, BuildingFarm, 20, 11).OK {
+	// (20,5) is in the northern Plains region (unlike (20,11), which is now in the
+	// southern Mountains band and would need Gold — see computeTerrain), so it stays
+	// freely buildable and isolates the ruin-blocking behavior this test checks.
+	if !CanPlaceBuilding(s, BuildingFarm, 20, 5).OK {
 		t.Error("expected an unrelated cell to remain buildable")
 	}
 }

@@ -1,6 +1,8 @@
-import { TRADE_REWARDS, tradeRewardText } from '../engine/gameData'
-import type { Die, GameState } from '../engine/types'
-import type { Action } from '../engine/reducer'
+import clsx from 'clsx'
+import { TRADE_REWARDS, tradeRewardText } from '../../engine/gameData'
+import type { Die, GameState } from '../../engine/types'
+import type { Action } from '../../engine/reducer'
+import styles from './Trade.module.scss'
 
 interface Props {
   state: GameState
@@ -12,18 +14,18 @@ interface Props {
 export function Trade({ state, dispatch, selectedDie, onDieConsumed }: Props) {
   const inDev = state.phase === 'development'
   return (
-    <section className="panel trade" data-tutorial="trade">
+    <section className="panel" data-tutorial="trade">
       <h3 className="panel__title">Trade Caravans</h3>
-      <div className="trade__rows">
+      <div>
         {state.tradeRows.map((row, ri) => (
-          <div key={ri} className={['trade__row', row.completed ? 'is-complete' : ''].join(' ')}>
+          <div key={ri} className={clsx(styles.row, row.completed && styles.isComplete)}>
             {row.cells.map((cell, ci) => {
               const isNext = !cell.filled && row.cells.slice(0, ci).every((c) => c.filled)
               const canFill = inDev && selectedDie && !selectedDie.usedFor && isNext && selectedDie.value >= cell.threshold
               return (
                 <button
                   key={ci}
-                  className={['trade__cell', cell.filled ? 'is-filled' : '', isNext ? 'is-next' : ''].join(' ')}
+                  className={clsx(styles.cell, cell.filled && styles.isFilled, isNext && styles.isNext)}
                   disabled={!canFill}
                   title={`Needs ${cell.threshold}+`}
                   onClick={() => {
@@ -37,7 +39,7 @@ export function Trade({ state, dispatch, selectedDie, onDieConsumed }: Props) {
                 </button>
               )
             })}
-            <span className="trade__reward">
+            <span className={styles.reward}>
               {row.completed ? 'Delivered — ' : '→ '}
               {tradeRewardText(TRADE_REWARDS[ri])}
             </span>

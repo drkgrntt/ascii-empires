@@ -1,12 +1,13 @@
-import type { GameState } from '../engine/types'
-import type { Action } from '../engine/reducer'
+import type { GameState } from '../../engine/types'
+import type { Action } from '../../engine/reducer'
+import styles from './AnytimeActions.module.scss'
 
 export function AnytimeActions({ state, dispatch }: { state: GameState; dispatch: React.Dispatch<Action> }) {
   const disabled = state.phase === 'gameover' || state.phase === 'dice'
   return (
-    <section className="panel anytime" data-tutorial="anytime">
+    <section className="panel" data-tutorial="anytime">
       <h3 className="panel__title">Anytime</h3>
-      <div className="anytime__actions">
+      <div className={styles.actions}>
         <button className="btn btn--small" disabled={disabled} onClick={() => dispatch({ type: 'TAXATION' })}>
           Taxation: +2 Gold, +1 :(
         </button>

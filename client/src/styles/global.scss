@@ -1,4 +1,5 @@
-@use './tokens' as t;
+@use './tokens';
+@use './shared';
 
 * {
   box-sizing: border-box;
@@ -8,13 +9,13 @@ html,
 body {
   margin: 0;
   padding: 0;
-  background-color: t.$paper-dark;
+  background-color: var(--paper-dark);
   // Faint graph-paper grid, echoing the printed Empire sheet.
-  background-image: linear-gradient(rgba(t.$ink, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(t.$ink, 0.05) 1px, transparent 1px);
+  background-image: linear-gradient(rgba(var(--ink-rgb), 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--ink-rgb), 0.05) 1px, transparent 1px);
   background-size: 24px 24px;
-  color: t.$ink;
-  font-family: t.$font-body;
+  color: var(--ink);
+  font-family: var(--font-body);
 }
 
 button {
@@ -22,11 +23,11 @@ button {
 }
 
 ::selection {
-  background: rgba(t.$verdigris, 0.35);
+  background: rgba(var(--verdigris-rgb), 0.35);
 }
 
 :focus-visible {
-  outline: 2px solid t.$verdigris;
+  outline: 2px solid var(--verdigris);
   outline-offset: 2px;
 }
 

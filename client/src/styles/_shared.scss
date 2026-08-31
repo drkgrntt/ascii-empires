@@ -1,0 +1,75 @@
+.hint {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  margin: 4px 0 8px;
+}
+
+// --- Buttons ----------------------------------------------------------
+.btn {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.85rem;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  padding: 8px 14px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: transform 0.08s ease, background-color 0.12s ease;
+
+  &:hover:not(:disabled) {
+    background: var(--paper-dark);
+  }
+  &:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+.btn--primary {
+  background: var(--verdigris);
+  border-color: var(--verdigris-dark);
+  color: var(--paper);
+
+  &:hover:not(:disabled) {
+    background: var(--verdigris-dark);
+  }
+}
+
+.btn--small {
+  padding: 5px 10px;
+  font-size: 0.78rem;
+}
+
+.btn--warn {
+  border-color: var(--brick);
+  color: var(--brick);
+}
+
+.btn.is-active {
+  background: var(--gold);
+  color: var(--paper);
+}
+
+// --- Panels -----------------------------------------------------------
+.panel {
+  background: var(--paper);
+  border: 1px solid var(--paper-line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  padding: 14px 16px;
+}
+
+.panel__title {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  margin: 0 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--paper-line);
+  color: var(--ink);
+}

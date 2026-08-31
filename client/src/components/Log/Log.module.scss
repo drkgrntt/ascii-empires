@@ -1,0 +1,26 @@
+// --- Log ----------------------------------------------------------------
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 480px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.entry {
+  font-size: 0.78rem;
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px dashed var(--paper-line);
+  padding-bottom: 6px;
+}
+
+.round {
+  font-family: var(--font-mono);
+  color: var(--verdigris-dark);
+  font-weight: 700;
+  flex-shrink: 0;
+}

@@ -89,7 +89,7 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     id: 'map',
     target: '[data-tutorial="map"]',
     title: 'Placing a building',
-    body: "Clicking Build enters placement mode — legal plots light up on the map. Water blocks building outright; Mountains (the tan majority of the map) cost 1 Gold rather than blocking you; Mines must be built on an Ore deposit (the gold stars); and no building may touch another, even diagonally.",
+    body: "Clicking Build enters placement mode — legal plots light up on the map. Water blocks building outright; Mountains (the salmon-tinted southern band) cost 1 Gold rather than blocking you; Mines must be built on an Ore deposit (the gold stars); and no building may touch another, even diagonally.",
   },
   {
     id: 'empire-tracks',
@@ -105,7 +105,7 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
   },
   {
     id: 'science',
-    target: '.track--science-group',
+    target: '[data-tutorial="science-group"]',
     title: 'Science actually branches',
     body: "This isn't a single track — a 4-box trunk (researching Irrigation at the end) forks into a Philosophy branch (unlocks the Green die) and an Engineering-approach branch, which itself forks again into Engineering (Black die) and Walls & Iron (military bonuses). Each School activation lets you choose which unlocked branch to advance.",
   },

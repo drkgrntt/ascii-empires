@@ -1,0 +1,122 @@
+// --- Map ----------------------------------------------------------------
+.map {
+  margin-bottom: 16px;
+}
+
+.cancel {
+  float: right;
+  text-transform: none;
+  letter-spacing: normal;
+  font-family: var(--font-body);
+}
+
+.gridWrap {
+  display: flex;
+  justify-content: center;
+  overflow-x: auto;
+  padding: 4px 0;
+}
+
+.grid {
+  display: grid;
+  gap: 2px;
+  font-family: var(--font-mono);
+}
+
+.cell {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  border: 1px solid rgba(var(--ink-rgb), 0.12);
+  background: color-mix(in srgb, var(--paper) 55%, white);
+  color: var(--ink-faint);
+  cursor: default;
+}
+
+.water {
+  background: color-mix(in srgb, var(--slate) 60%, var(--paper));
+  color: var(--paper);
+  border-color: color-mix(in srgb, var(--slate) 70%, var(--ink));
+}
+// Mountains = the sheet's salmon band, which is also the Barbarian-territory band
+// (Barbarian camps sit in the Mountains, not on a separate cosmetic tint — see
+// engine/map.ts).
+.mountains {
+  background: color-mix(in srgb, var(--brick) 22%, var(--paper));
+}
+.ore {
+  background: color-mix(in srgb, var(--gold) 55%, var(--paper));
+  color: var(--ink);
+  font-weight: 700;
+}
+.barbarian {
+  background: var(--brick);
+  color: var(--paper);
+  font-weight: 700;
+}
+.reclaimed {
+  background: color-mix(in srgb, var(--verdigris) 30%, var(--paper));
+  color: var(--verdigris-dark);
+}
+.building {
+  background: var(--paper);
+  color: var(--ink);
+  font-weight: 700;
+  border-color: var(--ink);
+}
+.unstaffed {
+  opacity: 0.55;
+}
+.clickable {
+  cursor: pointer;
+  background: color-mix(in srgb, var(--verdigris) 35%, var(--paper));
+  outline: 2px solid var(--verdigris);
+  outline-offset: -2px;
+  color: var(--verdigris-dark);
+
+  &:hover {
+    background: var(--verdigris);
+    color: var(--paper);
+  }
+}
+.cell:disabled {
+  cursor: default;
+}
+.previewOk {
+  background: color-mix(in srgb, var(--verdigris) 55%, var(--paper));
+  outline: 1px dashed var(--verdigris-dark);
+  outline-offset: -1px;
+}
+.previewBad {
+  background: color-mix(in srgb, var(--brick) 45%, var(--paper));
+  outline: 1px dashed var(--brick);
+  outline-offset: -1px;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 14px;
+  margin-top: 10px;
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+
+  .swatch {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    margin-right: 4px;
+    font-style: normal;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    border: 1px solid rgba(var(--ink-rgb), 0.15);
+    vertical-align: middle;
+  }
+}

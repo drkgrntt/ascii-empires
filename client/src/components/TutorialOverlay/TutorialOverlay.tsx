@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import type { TutorialStep } from '../tutorial/steps'
+import type { TutorialStep } from '../../tutorial/steps'
+import styles from './TutorialOverlay.module.scss'
 
 interface Props {
   step: TutorialStep
@@ -10,7 +11,7 @@ interface Props {
 }
 
 // A no-dependency "coach mark" spotlight: a dimmed backdrop with a rectangular
-// cutout (via a giant box-shadow — see App.scss `.tutorial__spotlight`) over the
+// cutout (via a giant box-shadow — see TutorialOverlay.module.scss `.spotlight`) over the
 // step's target element, plus a fixed callout card with the step's text. The
 // callout stays in one place (bottom of the viewport) rather than following the
 // target around — simpler and more robust across the app's 1-4 column responsive
@@ -46,11 +47,11 @@ export function TutorialOverlay({ step, stepNumber, totalSteps, onNext, onDismis
   }, [step.target])
 
   return (
-    <div className="tutorial">
-      <div className="tutorial__backdrop" />
+    <div className={styles.tutorial}>
+      <div className={styles.backdrop} />
       {rect && (
         <div
-          className="tutorial__spotlight"
+          className={styles.spotlight}
           style={{
             top: rect.top - 6,
             left: rect.left - 6,
@@ -60,13 +61,13 @@ export function TutorialOverlay({ step, stepNumber, totalSteps, onNext, onDismis
         />
       )}
 
-      <div className="tutorial__callout">
-        <div className="tutorial__progress">
+      <div className={styles.callout}>
+        <div className={styles.progress}>
           Step {stepNumber} / {totalSteps}
         </div>
-        <h3 className="tutorial__title">{step.title}</h3>
-        <p className="tutorial__body">{step.body}</p>
-        <div className="tutorial__actions">
+        <h3 className={styles.title}>{step.title}</h3>
+        <p className={styles.body}>{step.body}</p>
+        <div className={styles.actions}>
           <button className="btn btn--small" onClick={onDismiss}>
             Skip tutorial
           </button>

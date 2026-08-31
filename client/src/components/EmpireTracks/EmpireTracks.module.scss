@@ -1,0 +1,101 @@
+// --- Empire tracks --------------------------------------------------------
+.empireTracks {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--paper);
+  border: 1px solid var(--paper-line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  padding: 14px 16px;
+}
+
+.trackTitle {
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.trackBoxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  font-family: var(--font-mono);
+}
+
+.trackBox {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--ink-faint);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  background: rgba(var(--paper-dark-rgb), 0.4);
+  cursor: default; // most tracks; population boxes carry a title tooltip
+}
+
+// Marks the last box of each Great-Person group on the Population track — a
+// visible gap so "fill this many to earn one" reads at a glance.
+.trackBox.isGroupEnd {
+  margin-right: 8px;
+}
+
+.trackHint {
+  font-size: 0.7rem;
+  color: var(--ink-faint);
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+.trackBox.isFilled {
+  background: var(--slate);
+  color: var(--paper);
+  border-color: var(--slate);
+}
+.gold .trackBox.isFilled {
+  background: var(--gold);
+  border-color: var(--gold);
+}
+.military .trackBox.isFilled {
+  background: var(--brick);
+  border-color: var(--brick);
+}
+.science .trackBox.isFilled {
+  background: var(--verdigris);
+  border-color: var(--verdigris-dark);
+}
+.trackBox.isHighlight:not(.isFilled) {
+  border-color: var(--verdigris);
+  border-width: 2px;
+}
+.happy .trackBox.isFilled {
+  background: var(--verdigris);
+  border-color: var(--verdigris-dark);
+}
+.unhappy .trackBox.isFilled {
+  background: var(--brick);
+  border-color: var(--brick);
+}
+
+.pair {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+
+  .track {
+    flex: 1;
+    min-width: 160px;
+  }
+}
+
+.scienceGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.scienceLocked .trackTitle {
+  opacity: 0.55;
+  font-style: italic;
+}

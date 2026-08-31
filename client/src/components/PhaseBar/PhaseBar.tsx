@@ -1,5 +1,7 @@
-import type { GameState } from '../engine/types'
-import type { Action } from '../engine/reducer'
+import clsx from 'clsx'
+import type { GameState } from '../../engine/types'
+import type { Action } from '../../engine/reducer'
+import styles from './PhaseBar.module.scss'
 
 const PHASE_LABEL: Record<GameState['phase'], string> = {
   dice: '1 · Dice',
@@ -21,27 +23,27 @@ export function PhaseBar({ state, dispatch, selectedDieId, onClearSelection }: P
   const phases: GameState['phase'][] = ['dice', 'diplomacy', 'disasters', 'development', 'deployment']
 
   return (
-    <div className="phase-bar" data-tutorial="phase-bar">
-      <div className="phase-bar__steps">
+    <div className={styles.phaseBar} data-tutorial="phase-bar">
+      <div className={styles.steps}>
         {phases.map((p) => (
-          <span key={p} className={['phase-bar__step', state.phase === p ? 'is-active' : ''].join(' ')}>
+          <span key={p} className={clsx(styles.step, state.phase === p && styles.isActive)}>
             {PHASE_LABEL[p]}
           </span>
         ))}
       </div>
 
-      <div className="phase-bar__action">
+      <div className={styles.action}>
         {state.phase === 'dice' && (
           <button className="btn btn--primary" onClick={() => dispatch({ type: 'ROLL_DICE' })}>
             Roll the five dice
           </button>
         )}
         {state.phase === 'diplomacy' && (
-          <div className="phase-bar__diplomacy">
+          <div className={styles.diplomacy}>
             <p className="hint">
               Select die faces above, then reroll them for {1} Gold per reroll — or move straight to Disasters.
             </p>
-            <div className="phase-bar__row">
+            <div className={styles.row}>
               <button
                 className="btn"
                 disabled={!selectedDieId}

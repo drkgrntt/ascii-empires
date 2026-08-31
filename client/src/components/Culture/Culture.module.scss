@@ -1,0 +1,114 @@
+// Every row (cells, column markers, column rewards) is a grid sharing the exact
+// same column template (set inline, per Culture — see Culture.tsx), so cells
+// placed by `gridColumn` line up precisely across rows regardless of how many
+// cells a given row actually has.
+.row {
+  display: grid;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 8px;
+  font-family: var(--font-mono);
+}
+
+// Shared cell look — duplicated verbatim in Trade/Trade.module.scss (also
+// .cell) — both sides of a combined selector originally shared as
+// `.trade__cell, .culture__cell` in App.scss.
+.cell {
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  cursor: pointer;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+.cell.isFilled {
+  background: var(--verdigris);
+  color: var(--paper);
+  border-color: var(--verdigris-dark);
+}
+
+// Badged like .rewardCell below, so a row's payout reads with the same
+// weight as a column's — both are "the reward," just on different schedules.
+.rowScore {
+  margin-left: 8px;
+  padding: 3px 6px;
+  font-size: 0.7rem;
+  white-space: nowrap;
+  color: var(--ink-soft);
+  border: 1px solid var(--paper-line);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--slate) 8%, var(--paper));
+  cursor: default;
+
+  &.isComplete {
+    color: var(--ink);
+    font-weight: 700;
+    background: color-mix(in srgb, var(--verdigris) 30%, var(--paper));
+    border-color: var(--verdigris-dark);
+  }
+}
+
+.columns {
+  margin-top: 4px;
+  padding-top: 6px;
+  border-top: 1px dashed var(--ink-soft);
+}
+
+.colMarker {
+  width: 26px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+
+  &.isComplete {
+    color: var(--gold);
+    font-weight: 700;
+  }
+}
+
+.rewards {
+  margin-top: 0;
+}
+
+.rewardCell {
+  width: 26px;
+  min-height: 26px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  padding: 2px 0;
+  border: 1px solid var(--paper-line);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--slate) 12%, var(--paper));
+  cursor: default;
+
+  &.isComplete {
+    background: color-mix(in srgb, var(--gold) 30%, var(--paper));
+    border-color: var(--gold);
+  }
+}
+
+.rewardGlyph {
+  font-size: 0.62rem;
+  line-height: 1.1;
+  color: var(--ink-soft);
+
+  .rewardCell.isComplete & {
+    color: var(--ink);
+    font-weight: 700;
+  }
+}

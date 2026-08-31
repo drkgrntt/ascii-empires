@@ -1,0 +1,63 @@
+// --- Buildings table --------------------------------------------------
+.construction {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+  font-size: 0.85rem;
+}
+
+.tableWrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  min-width: 300px;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+  table-layout: fixed;
+
+  th,
+  td {
+    text-align: left;
+    padding: 5px 4px;
+    border-bottom: 1px solid var(--paper-line);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  th {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    font-size: 0.65rem;
+  }
+  tbody tr.isPlacing td {
+    background: color-mix(in srgb, var(--verdigris) 25%, var(--paper));
+  }
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+
+  :global(.btn) {
+    width: 100%;
+    padding: 3px 6px;
+  }
+}
+
+.colonyActivate {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+  font-size: 0.85rem;
+}

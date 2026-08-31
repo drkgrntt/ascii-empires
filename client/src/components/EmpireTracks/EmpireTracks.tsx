@@ -1,4 +1,5 @@
-import type { BuildingType, GameState, PopulationSlot, ScienceBranchId, ScienceTarget } from '../engine/types'
+import clsx from 'clsx'
+import type { BuildingType, GameState, PopulationSlot, ScienceBranchId, ScienceTarget } from '../../engine/types'
 import {
   BUILDING_DEFS,
   HAPPINESS_TRACK,
@@ -8,7 +9,8 @@ import {
   SCIENCE_TRUNK_LENGTH,
   SCIENCE_TRUNK_MILESTONES,
   UNHAPPINESS_TRACK,
-} from '../engine/gameData'
+} from '../../engine/gameData'
+import styles from './EmpireTracks.module.scss'
 
 // A branch is unlocked once whatever it `requires` (the trunk, or another branch)
 // is fully marked — mirrors reducer.ts's isBranchUnlocked (kept UI-side to avoid
@@ -21,37 +23,40 @@ function isBranchUnlocked(state: GameState, id: ScienceBranchId): boolean {
   return isTargetComplete(state, SCIENCE_BRANCHES[id].requires)
 }
 
+// Keys are camelCase names of this module's own local classes (e.g. "gold")
+// — each call site below passes its own key directly, so no separate lookup map
+// is needed for this internal, single-file prop.
 function Track({
   title,
   boxes,
-  className,
+  trackClassName,
   hint,
 }: {
   title: string
   boxes: { char: string; filled: boolean; highlight?: boolean; title?: string; groupEnd?: boolean }[]
-  className?: string
+  trackClassName?: keyof typeof styles
   hint?: string
 }) {
   return (
-    <div className={['track', className].filter(Boolean).join(' ')}>
-      <div className="track__title">{title}</div>
-      <div className="track__boxes">
+    <div className={clsx(styles.track, trackClassName && styles[trackClassName])}>
+      <div className={styles.trackTitle}>{title}</div>
+      <div className={styles.trackBoxes}>
         {boxes.map((b, i) => (
           <span
             key={i}
             title={b.title}
-            className={[
-              'track__box',
-              b.filled ? 'is-filled' : '',
-              b.highlight ? 'is-highlight' : '',
-              b.groupEnd ? 'is-group-end' : '',
-            ].join(' ')}
+            className={clsx(
+              styles.trackBox,
+              b.filled && styles.isFilled,
+              b.highlight && styles.isHighlight,
+              b.groupEnd && styles.isGroupEnd,
+            )}
           >
             {b.filled ? b.char : ''}
           </span>
         ))}
       </div>
-      {hint && <div className="track__hint">{hint}</div>}
+      {hint && <div className={styles.trackHint}>{hint}</div>}
     </div>
   )
 }
@@ -92,24 +97,23 @@ export function EmpireTracks({ state }: { state: GameState }) {
   const specialists = state.population.filter((p) => p.state !== 'worker' && p.state !== 'empty').length
 
   return (
-    <section className="empire-tracks" data-tutorial="empire-tracks">
+    <section className={styles.empireTracks} data-tutorial="empire-tracks">
       <Track
         title={`Population (${workers} Workers, ${specialists} Specialists)`}
         boxes={populationBoxes(state.population)}
         hint="A Worker becomes a Specialist the moment you use them to staff a building — hover a box for details. The gaps mark the 7 Great-Person groups (6/6/6/5/4/4/4); filling every slot in one — Workers or Specialists alike — produces a Great Person."
-        className="track--population"
       />
       <Track
         title={`Gold (${state.gold} / ${state.goldTrackMax})`}
         boxes={Array.from({ length: state.goldTrackMax }, (_, i) => ({ char: 'O', filled: i < state.gold }))}
-        className="track--gold"
+        trackClassName="gold"
       />
       <Track
         title={`Military (${Math.floor(state.militaryBoxes.filter(Boolean).length / 2)} Armies)`}
         boxes={state.militaryBoxes.map((b) => ({ char: 'X', filled: b }))}
-        className="track--military"
+        trackClassName="military"
       />
-      <div className="track-group track--science-group">
+      <div className={styles.scienceGroup} data-tutorial="science-group">
         <Track
           title={`Science: Trunk (${state.scienceTrunkMarked} / ${SCIENCE_TRUNK_LENGTH})`}
           boxes={Array.from({ length: SCIENCE_TRUNK_LENGTH }, (_, i) => ({
@@ -117,7 +121,7 @@ export function EmpireTracks({ state }: { state: GameState }) {
             filled: i < state.scienceTrunkMarked,
             highlight: SCIENCE_TRUNK_MILESTONES.some((m) => m.index === i + 1),
           }))}
-          className="track--science"
+          trackClassName="science"
         />
         {SCIENCE_BRANCH_ORDER.map((id) => {
           const def = SCIENCE_BRANCHES[id]
@@ -132,27 +136,27 @@ export function EmpireTracks({ state }: { state: GameState }) {
                 filled: i < marked,
                 highlight: def.milestones.some((m) => m.index === i + 1),
               }))}
-              className="track--science"
+              trackClassName="science"
             />
           ) : (
-            <div key={id} className="track track--science-locked">
-              <div className="track__title">
+            <div key={id} className={clsx(styles.track, styles.scienceLocked)}>
+              <div className={styles.trackTitle}>
                 🔒 Science: {def.label} (requires {def.requires === 'trunk' ? 'the Trunk' : SCIENCE_BRANCHES[def.requires].label})
               </div>
             </div>
           )
         })}
       </div>
-      <div className="track-pair">
+      <div className={styles.pair}>
         <Track
           title={`Happiness (${HAPPINESS_TRACK[state.happiness]})`}
           boxes={Array.from({ length: state.happinessMax }, (_, i) => ({ char: ':)', filled: i < state.happiness }))}
-          className="track--happy"
+          trackClassName="happy"
         />
         <Track
           title={`Unhappiness (${UNHAPPINESS_TRACK[state.unhappiness]})`}
           boxes={Array.from({ length: state.unhappinessMax }, (_, i) => ({ char: ':(', filled: i < state.unhappiness }))}
-          className="track--unhappy"
+          trackClassName="unhappy"
         />
       </div>
     </section>

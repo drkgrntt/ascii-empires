@@ -1,7 +1,9 @@
-import type { Die, GameState } from '../engine/types'
-import type { Action } from '../engine/reducer'
+import clsx from 'clsx'
+import type { Die, GameState } from '../../engine/types'
+import type { Action } from '../../engine/reducer'
 import { useState } from 'react'
-import { CULTURE_COLUMN_REWARDS, cultureRewardGlyphs, cultureRewardText } from '../engine/gameData'
+import { CULTURE_COLUMN_REWARDS, cultureRewardGlyphs, cultureRewardText } from '../../engine/gameData'
+import styles from './Culture.module.scss'
 
 interface Props {
   state: GameState
@@ -20,21 +22,21 @@ export function Culture({ state, dispatch, selectedDie, onDieConsumed }: Props) 
   const gridTemplate = { gridTemplateColumns: `repeat(${maxCols}, 26px) auto` }
 
   return (
-    <section className="panel culture" data-tutorial="culture">
+    <section className="panel" data-tutorial="culture">
       <h3 className="panel__title">Culture</h3>
       {state.greatPersonTokens > 0 && (
-        <button className={['btn btn--small', spendingToken ? 'is-active' : ''].join(' ')} onClick={() => setSpendingToken((v) => !v)}>
+        <button className={clsx('btn btn--small', spendingToken && 'is-active')} onClick={() => setSpendingToken((v) => !v)}>
           {spendingToken ? 'Cancel Great Person spend' : `Spend a banked token on a cell (${state.greatPersonTokens} banked)`}
         </button>
       )}
-      <div className="culture__grid">
+      <div>
         {state.cultureRows.map((row, ri) => {
           // Rows are right-aligned to the sheet's 7-column grid (shorter rows start
           // further right), so the rightmost column is shared by every row (hardest
           // to complete) and the leftmost only by the longest rows (easiest).
           const offset = maxCols - row.cells.length
           return (
-            <div key={ri} className={['culture__row', row.completed ? 'is-complete' : ''].join(' ')} style={gridTemplate}>
+            <div key={ri} className={clsx(styles.row, row.completed && styles.isComplete)} style={gridTemplate}>
               {row.cells.map((cell, ci) => {
                 const col = offset + ci
                 const canFillWithDie = inDev && selectedDie && !selectedDie.usedFor && !cell.filled && selectedDie.value >= cell.threshold
@@ -43,7 +45,7 @@ export function Culture({ state, dispatch, selectedDie, onDieConsumed }: Props) 
                 return (
                   <button
                     key={ci}
-                    className={['culture__cell', cell.filled ? 'is-filled' : ''].join(' ')}
+                    className={clsx(styles.cell, cell.filled && styles.isFilled)}
                     style={{ gridColumn: col + 1 }}
                     disabled={!clickable}
                     title={`Needs ${cell.threshold}+`}
@@ -62,7 +64,7 @@ export function Culture({ state, dispatch, selectedDie, onDieConsumed }: Props) 
                 )
               })}
               <span
-                className={['culture__row-score', row.completed ? 'is-complete' : ''].join(' ')}
+                className={clsx(styles.rowScore, row.completed && styles.isComplete)}
                 style={{ gridColumn: maxCols + 1 }}
                 title={`Row reward: +${row.score} pts — scored at game end${row.completed ? ' (row complete)' : ', once every cell in this row is filled'}`}
               >
@@ -72,11 +74,11 @@ export function Culture({ state, dispatch, selectedDie, onDieConsumed }: Props) 
           )
         })}
 
-        <div className="culture__row culture__row--columns" style={gridTemplate}>
+        <div className={clsx(styles.row, styles.columns)} style={gridTemplate}>
           {Array.from({ length: maxCols }, (_, ci) => (
             <span
               key={ci}
-              className={['culture__col-marker', state.cultureColumns[ci] ? 'is-complete' : ''].join(' ')}
+              className={clsx(styles.colMarker, state.cultureColumns[ci] && styles.isComplete)}
               style={{ gridColumn: ci + 1 }}
               title={`Column ${ci + 1}${state.cultureColumns[ci] ? ' — complete' : ''}`}
             >
@@ -85,19 +87,19 @@ export function Culture({ state, dispatch, selectedDie, onDieConsumed }: Props) 
           ))}
         </div>
 
-        <div className="culture__row culture__row--rewards" style={gridTemplate}>
+        <div className={clsx(styles.row, styles.rewards)} style={gridTemplate}>
           {Array.from({ length: maxCols }, (_, ci) => {
             const reward = CULTURE_COLUMN_REWARDS[ci]
             const complete = state.cultureColumns[ci]
             return (
               <span
                 key={ci}
-                className={['culture__reward-cell', complete ? 'is-complete' : ''].join(' ')}
+                className={clsx(styles.rewardCell, complete && styles.isComplete)}
                 style={{ gridColumn: ci + 1 }}
                 title={`Column ${ci + 1} reward: ${cultureRewardText(reward)}${complete ? ' — claimed' : ' — one-time, on completion'}`}
               >
                 {cultureRewardGlyphs(reward).map((glyph, gi) => (
-                  <span key={gi} className="culture__reward-glyph">
+                  <span key={gi} className={styles.rewardGlyph}>
                     {glyph}
                   </span>
                 ))}

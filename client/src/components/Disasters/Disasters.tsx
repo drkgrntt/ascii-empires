@@ -1,5 +1,7 @@
-import type { GameState } from '../engine/types'
-import type { Action } from '../engine/reducer'
+import clsx from 'clsx'
+import type { GameState } from '../../engine/types'
+import type { Action } from '../../engine/reducer'
+import styles from './Disasters.module.scss'
 
 // What actually happens when each row's 3rd box fills — rulebook p.10. Rows 2/4/6
 // have no named disaster, but every row 3-6 still grants a free Culture mark
@@ -16,10 +18,10 @@ const DISASTER_EFFECTS: Record<number, string> = {
 export function Disasters({ state, dispatch }: { state: GameState; dispatch: React.Dispatch<Action> }) {
   const workerCount = state.population.filter((p) => p.state === 'worker').length
   return (
-    <section className="panel disasters" data-tutorial="disasters">
+    <section className="panel" data-tutorial="disasters">
       <h3 className="panel__title">Disaster Grid</h3>
       {state.pendingDrought && (
-        <div className="disasters__drought-choice">
+        <div className={styles.droughtChoice}>
           <p className="hint">Drought: choose one.</p>
           <button
             className="btn btn--small btn--warn"
@@ -33,7 +35,7 @@ export function Disasters({ state, dispatch }: { state: GameState; dispatch: Rea
           </button>
         </div>
       )}
-      <div className="disasters__rows">
+      <div className={styles.rows}>
         {state.disasterRows.map((row) => {
           const effect = DISASTER_EFFECTS[row.dieValue]
           const tooltip = row.hasCultureBonus
@@ -42,18 +44,18 @@ export function Disasters({ state, dispatch }: { state: GameState; dispatch: Rea
           return (
             <div
               key={row.dieValue}
-              className={['disasters__row', row.triggered ? 'is-triggered' : ''].join(' ')}
+              className={clsx(styles.row, row.triggered && styles.isTriggered)}
               title={tooltip}
             >
-              <span className="disasters__die">{row.dieValue}</span>
-              <span className="disasters__boxes">
+              <span className={styles.die}>{row.dieValue}</span>
+              <span className={styles.boxes}>
                 {row.boxes.map((b, i) => (
-                  <span key={i} className={['disasters__box', b ? 'is-filled' : ''].join(' ')} />
+                  <span key={i} className={clsx(styles.box, b && styles.isFilled)} />
                 ))}
               </span>
-              <span className="disasters__name">
+              <span className={styles.name}>
                 {row.name ?? '—'}
-                {row.hasCultureBonus && <span className="disasters__culture-flag"> +C</span>}
+                {row.hasCultureBonus && <span className={styles.cultureFlag}> +C</span>}
               </span>
             </div>
           )

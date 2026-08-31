@@ -1,0 +1,17 @@
+// --- Deployment / Disasters / Anytime ------------------------------------
+// Duplicated verbatim in AnytimeActions/AnytimeActions.module.scss (also
+// .actions) — both sides of a combined selector originally shared as
+// `.deployment__actions, .anytime__actions` in App.scss.
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.revoltChoice {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}

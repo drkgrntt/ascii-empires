@@ -1,0 +1,71 @@
+// --- Tutorial overlay -----------------------------------------------------
+// A no-dependency spotlight: a dim backdrop plus a rectangular cutout (a giant
+// box-shadow around a positioned, pointer-events-free rect) over the current
+// step's target. The callout stays fixed at the bottom of the viewport rather
+// than chasing the target around — robust across the app's 1-4 column responsive
+// layout without per-step positioning logic.
+.tutorial {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  pointer-events: none;
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(var(--ink-rgb), 0.45);
+}
+
+.spotlight {
+  position: fixed;
+  border-radius: 8px;
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 9999px rgba(var(--ink-rgb), 0.55);
+  transition: top 0.15s ease, left 0.15s ease, width 0.15s ease, height 0.15s ease;
+}
+
+.callout {
+  position: fixed;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%);
+  width: min(560px, calc(100vw - 32px));
+  background: var(--paper);
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 24px rgba(var(--ink-rgb), 0.35);
+  padding: 16px 18px;
+  pointer-events: auto;
+}
+
+.progress {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 4px;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  margin: 0 0 8px;
+  color: var(--verdigris-dark);
+}
+
+.body {
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--ink);
+  margin: 0 0 14px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}

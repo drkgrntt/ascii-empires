@@ -17,6 +17,11 @@ npm run dev
 Then open the printed local URL. `npm run build` produces a static `dist/` you can
 host anywhere.
 
+## Deploy
+
+`Dockerfile` (builds `dist/`, serves it via nginx on a fixed port) +
+`docker-compose.yml` — see the repo root's `DEPLOY.md`.
+
 ## How to play
 
 First visit opens a guided tutorial automatically — an 18-step tour that walks
@@ -99,17 +104,27 @@ Built directly from the rulebook/sheet text:
 Also built from the rulebook/sheet's own MAP LEGEND:
 
 - **A literal map**, measured directly off `docs/ASCII_Empires_Player_Sheet_Color.pdf`'s
-  colored zones. A 27×23 dot-grid Empire map sized to match the scanned sheet — sea
-  along the north edge, a one-column strait splitting the two coasts (straight,
-  with a single jog partway down, not a winding river), a one-column Plains
-  corridor hugging each side of the strait, Mountains dominating the northern
-  two-thirds of the map (the corridor is the only *free* land up there — Mountains
-  don't block building, they cost 1 Gold, per the sheet's "Ø to build" — Ø is the
-  Gold-cost symbol, easy to misread as "forbidden"), a tinted southern "Barbarian
-  territory" band that's cosmetic — fully buildable, just marked as raid-prone — 8
-  Ore deposits a Mine must be built on (2 of them sit in the Mountains band itself,
-  so a Mine there still costs the 1 Gold), and the 5 Barbarian camps as fixed map
-  sites. Buildings occupy their real fixed-shape footprint from the sheet's
+  colored zones and the MAP LEGEND's own swatch fills (confirmed from the PDF's actual
+  vector fill colors, not just a raster read of the scan). A 27×23 dot-grid Empire map
+  sized to match the scanned sheet — sea along the north edge, a one-column strait
+  splitting the two coasts (straight, with a single jog partway down, not a winding
+  river), a one-column Plains corridor hugging each side of the strait, and a
+  dominant northern Plains region — both free to build on, per the legend's "No
+  building restrictions." The southern "Barbarian territory" band is *not* a cosmetic
+  tint over Plains: it's the Mountains terrain itself (Barbarian camps sit *in* the
+  Mountains, which is why the legend's "Mountains" and "Barbarians" rows share the
+  same salmon swatch) — Mountains don't block building, they cost 1 Gold, per the
+  sheet's "Ø to build" (Ø is the Gold-cost symbol, easy to misread as "forbidden").
+  It's also the larger of the two bands (roughly 12-13 of 21 land rows per column vs.
+  8-9), so Mountains, not Plains, really are the dominant terrain overall — just
+  dominant in the south, not the north as a first glance at the tan/cream color
+  suggests. This also matches the rulebook's own text (p.5, independent of any sheet
+  colors): Ore deposits are "mostly, but not exclusively, located in the Mountains" —
+  of the 8 Ore deposits a Mine must be built on, 6 sit in the southern Mountains band
+  (so a Mine there still costs the 1 Gold) and 2 in the northern Plains region (no
+  Gold cost), a 75/25 split that fits "mostly, not exclusively" exactly. There are
+  also the 5 Barbarian camps as fixed map sites. Buildings occupy their real
+  fixed-shape footprint from the sheet's
   BUILDINGS section (measured off `docs/ASCII_Empires_Player_Sheet_Color.pdf`), not
   a single plot: Farm and Mine are 8-line shapes (an L-tromino and a solid 2x2
   square), School and Garrison are 12-line shapes (mirror-image crenellations —
@@ -159,7 +174,7 @@ boxes (`/`, `O`, `X`, `S`, `:)`) instead of progress bars, mirroring the physica
 Empire sheet rather than looking like a generic dashboard.
 
 The tutorial (`src/tutorial/`, `src/hooks/useTutorial.ts`,
-`src/components/TutorialOverlay.tsx`) is a spotlight tour over the real,
+`src/components/TutorialOverlay/TutorialOverlay.tsx`) is a spotlight tour over the real,
 live game rather than a scripted fake playthrough — deliberately, so it
 can't drift from the actual rules engine this project spends so much effort
 keeping accurate, and so it teaches the exact UI a player uses for the
@@ -175,8 +190,13 @@ rather than gated on the player actually doing them.
 src/
   engine/       state shape, static game data, and the pure reducer
   hooks/        useGame() — wires the reducer into React; useTutorial() — tour state machine
-  components/   one file per UI panel, plus TutorialOverlay.tsx
+  components/   one directory per UI panel — ComponentName.tsx + a colocated
+                ComponentName.module.scss (CSS Modules, camelCase class names),
+                plus a colocated ComponentName.test.tsx where a test exists
   tutorial/      steps.ts — the guided tour's content
-  styles/       SCSS tokens + global styles
-  App.tsx       layout, dice-selection state
+  styles/       _tokens.scss (design tokens as native CSS custom properties,
+                e.g. --paper, resolved at runtime via the cascade, not Sass
+                variables), _shared.scss (plain global .btn/.hint/.panel
+                classes shared across components), global.scss
+  App.tsx + App.module.scss   layout, dice-selection state
 ```
