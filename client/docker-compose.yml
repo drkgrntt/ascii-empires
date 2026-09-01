@@ -1,3 +1,11 @@
+# `name:` pins the Compose project name. Without it, Compose defaults to the
+# directory's basename ("client") - which collides with any other checkout
+# on this host that also has a client/ directory (e.g. ~/sites/store/client).
+# Compose tracks container identity by project+service label, not
+# container_name, so that collision makes `docker compose up` recreate the
+# OTHER project's live container instead of creating a new one. Learned this
+# the hard way deploying this app alongside store/client - don't drop this.
+name: ascii-empires-client
 services:
   web:
     build: .
