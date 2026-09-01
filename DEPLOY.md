@@ -90,7 +90,11 @@ git clone git@github.com:drkgrntt/ascii-empires.git .   # first time only; `git 
 cd server
 cp .env.example .env   # first time only — fill in DB_* (from step 1 above) and an RSA keypair, see the file's comments
 docker compose up -d --build
-docker compose run --rm web ./migrate   # first deploy, and again after any schema change
+docker compose run --rm --entrypoint ./migrate web   # first deploy, and again after any schema change
+# NOTE: the image's ENTRYPOINT is fixed to ./app, so `docker compose run --rm web ./migrate`
+# only *appends* ./migrate as an argument to ./app rather than replacing it - it silently
+# starts a second API server instead, which then fails to bind the (already-in-use) port.
+# The --entrypoint override above is required.
 
 cd ../client
 docker compose up -d --build
